@@ -16,7 +16,10 @@
     "lib": "./lib"
   },
 	"dependencies": {
-		"restify": "*"
+		"restify": "*",
+    "http-signature": "*",
+    "any-db": "*",
+    "any-db-sqlite3": "*"
 	},
 	"devDependencies" : {
 		"vows": "0.7.0"
