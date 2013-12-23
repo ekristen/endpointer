@@ -9,6 +9,8 @@ The purpose of this library is to help manage your RESTful endpoints for Restify
 
 * Auto-generate Docs - Support more then markdown format as export.
 * Endpoint Middleware Support - better support for additional plugins/middleware that can be used against the endpoints?
+* Allow middleware to provide endpoints.
+* Allow for outside middleware to replace built-in defaults
 
 
 # Installation
