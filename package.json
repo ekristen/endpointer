@@ -1,10 +1,27 @@
 {
+  "author": "Erik Kristensen <erik@erikkristensen.com>",
+  "contributors": [
+    "Robert Klep"
+  ],
+  "homepage": "https://github.com/ekristen/restify-endpoints",
 	"name": "restify-endpoints",
-	"version": "1.0.0",
+  "description": "Endpoint Manager for Restify",
+	"version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mcavage/node-restify.git"
+  },
+  "main": "lib/index.js",
+  "directories": {
+    "lib": "./lib"
+  },
 	"dependencies": {
 		"restify": "*",
 	},
 	"devDependencies" : {
 		"vows": "0.7.0",
-	}
+	},
+  "engines": {
+    "node": ">=0.8"
+  }
 }
