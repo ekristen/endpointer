@@ -28,3 +28,6 @@ The purpose of this library is to help manage your RESTful endpoints for Restify
 ```
 npm install git+https://github.com/ekristen/restify-endpoints.git
 ```
+
+# Credits / Thanks
+A special thanks to https://github.com/robertklep for helping me visualize how to build the project and for the first iteration of the endpoints manager class.
