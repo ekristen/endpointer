@@ -10,3 +10,21 @@ The purpose of this library is to help manage your RESTful endpoints for Restify
 * Auto-generate Docs - Support more then markdown format as export.
 * Endpoint Middleware Support - better support for additional plugins/middleware that can be used against the endpoints?
 
+
+# Installation
+
+## package.json
+
+```
+{
+  "dependencies": {
+    "restify-endpoints": "git+https://github.com/ekristen/restify-endpoints.git"
+  }
+}
+```
+
+## npm install
+
+```
+npm install git+https://github.com/ekristen/restify-endpoints.git
+```
