@@ -1,0 +1,10 @@
+{
+	"name": "restify-endpoints",
+	"version": "1.0.0",
+	"dependencies": {
+		"restify": "*",
+	},
+	"devDependencies" : {
+		"vows": "0.7.0",
+	}
+}
