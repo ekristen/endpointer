@@ -6,7 +6,7 @@
   "homepage": "https://github.com/ekristen/restify-endpoints",
 	"name": "restify-endpoints",
   "description": "Endpoint Manager for Restify",
-	"version": "0.3.1",
+	"version": "0.3.2",
   "repository": {
     "type": "git",
     "url": "git://github.com/ekristen/restify-endpoints.git"
