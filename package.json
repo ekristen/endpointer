@@ -23,5 +23,8 @@
 	},
 	"devDependencies" : {
     "nodeunit": "*"
-	}
+  },
+  "scripts": {
+    "test": "nodeunit test/"
+  }
 }
