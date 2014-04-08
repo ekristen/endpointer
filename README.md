@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/ekristen/restify-endpoints.png)](https://travis-ci.org/ekristen/restify-endpoints)
+
 # Overview
 
 Version 1.0.0 has been released -- major changes, but everything should be backwards compatible.
