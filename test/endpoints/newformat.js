@@ -1,4 +1,4 @@
-module.exports = function() {
+module.exports = function(redis, mongodb) {
   
   var endpoints = {
     name: 'New Format',

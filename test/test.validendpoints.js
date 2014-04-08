@@ -1,4 +1,3 @@
-var domain = require('domain');
 var restify = require('restify');
 
 var manager = require('../lib');
