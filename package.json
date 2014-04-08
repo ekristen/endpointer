@@ -6,7 +6,7 @@
   "homepage": "https://github.com/ekristen/restify-endpoints",
 	"name": "restify-endpoints",
   "description": "Endpoint Manager for Restify",
-	"version": "0.3.2",
+	"version": "1.0.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/ekristen/restify-endpoints.git"
@@ -18,8 +18,6 @@
 	"dependencies": {
 		"restify": "*",
     "http-signature": "*",
-    "any-db": "*",
-    "any-db-sqlite3": "*"
 	},
 	"devDependencies" : {
     "nodeunit": "*"

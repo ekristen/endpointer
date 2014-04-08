@@ -1,5 +1,7 @@
 # Overview
 
+Version 1.0.0 has been released -- major changes, but everything should be backwards compatible.
+
 Development status: active development, alpha
 
 The purpose of this library is to help manage your RESTful endpoints for Restify. One of the biggest challenges to creating and maintaining and API service is it's documentation, Restify Endpoints tries to help solve this problem by allowing you to auto-generate documentation based on all your defined code. Instead of writing documentation separately, write it while you code, in your code.
