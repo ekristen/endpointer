@@ -20,6 +20,8 @@ exports.setUp = function(done) {
     url: 'http://localhost:9999'
   });
 
+  endpoints.attach(server);
+
   server.listen(9999, function() {
     done();
   });
@@ -31,6 +33,20 @@ exports.tearDown = function(done) {
   done();
 }
 
-exports.testAutoDiscover = function(test) {
-  test.done();
+exports.autoDiscoverFunctionFormat = function(test) {
+  client.get('/test6', function(err, req, res, data) {
+    test.ifError(err);
+    test.equal(res.statusCode, 200);
+    test.equal(data, 'function format');
+    test.done();
+  });
+}
+
+exports.autoDiscoverObjectFormat = function(test) {
+  client.get('/test5', function(err, req, res, data) {
+    test.ifError(err);
+    test.equal(res.statusCode, 200);
+    test.equal(data, 'object format');
+    test.done();
+  });
 }

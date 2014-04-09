@@ -1,16 +1,17 @@
-module.exports = function(redis, mongodb) {
+module.exports = function() {
   
   var endpoints = {
-    name: 'New Format',
-    description: 'New Format',
+    name: 'Function Format',
+    description: 'Function Format',
     endpoints: [
       {
         name: 'Test New Format',
         description: 'Test New Format',
         method: 'GET',
-        path: '/test4',
+        path: '/test6',
         fn: function (req, res, next) {
-          
+          res.send(200, 'function format');
+          return next();
         }
       }
     ]
