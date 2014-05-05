@@ -2,9 +2,9 @@
 
 # Overview
 
-Version 1.0.0 has been released -- major changes, but everything should be backwards compatible.
+Version 1.0.5 has been released
 
-Development status: active development, alpha
+Development status: active development, beta
 
 The purpose of this library is to help manage your RESTful endpoints for Restify. One of the biggest challenges to creating and maintaining and API service is it's documentation, Restify Endpoints tries to help solve this problem by allowing you to auto-generate documentation based on all your defined code. Instead of writing documentation separately, write it while you code, in your code.
 
@@ -13,14 +13,21 @@ The purpose of this library is to help manage your RESTful endpoints for Restify
 
 * Auto-generate Docs - Support more then markdown format as export.
 * Endpoint Middleware Support - better support for additional plugins/middleware that can be used against the endpoints?
-* Allow middleware to provide endpoints.
-* Allow for outside middleware to replace built-in defaults
-
 
 # Installation
 
 ## package.json
 
+### npm registry
+```
+{
+  "dependencies": {
+    "restify-endpoints": "~1.0.5"
+  }
+}
+```
+
+### git repository
 ```
 {
   "dependencies": {
@@ -30,6 +37,14 @@ The purpose of this library is to help manage your RESTful endpoints for Restify
 ```
 
 ## npm install
+
+### npm registry 
+
+```
+npm install restify-endpoints
+```
+
+### git repository
 
 ```
 npm install git+https://github.com/ekristen/restify-endpoints.git
