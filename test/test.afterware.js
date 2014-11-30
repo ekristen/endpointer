@@ -5,7 +5,7 @@ var SERVER;
 var STR_CLIENT;
 var ENDPOINTS;
 
-function testAfterware (req, res, next) {
+function testAfterware (req, res, route, err) {
   return next();
 }
 
