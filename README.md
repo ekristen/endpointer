@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/ekristen/restify-endpoints.png)](https://travis-ci.org/ekristen/restify-endpoints)
+[![npm version](https://badge.fury.io/js/restify-endpoints.svg)](http://badge.fury.io/js/restify-endpoints)
 
 # Overview
 
