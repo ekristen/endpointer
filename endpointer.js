@@ -5,10 +5,11 @@ var debug = require('debug')('endpoints')
 
 var docs = require('./docs.js')
 
-var Endpoints = function(options) {
+var Endpointer = function(options) {
   this.options = xtend({
     docs: false,
-    endpoint_args: []
+    endpoint_args: [],
+    endpointpath: ''
   }, options)
 
   this.endpoints = []
@@ -18,14 +19,14 @@ var Endpoints = function(options) {
   this.endpoint_modules = {}
 
   // Find all defined endpoints from the endpoint path
-  if (options.endpointpath) {
+  if (this.options.endpointpath) {
     this.autodiscover(options.endpointpath, this.options.endpoint_args)
   }
 };
 
 // Perform basic validation and add endpoint to endpoints array,
 // will be attached to the Restify Server later on.
-Endpoints.prototype.addEndpoint = function(endpoint) {
+Endpointer.prototype.addEndpoint = function(endpoint) {
   if (!endpoint.name)
     throw new Error('Name is required in an endpoint definition')
   
@@ -42,7 +43,7 @@ Endpoints.prototype.addEndpoint = function(endpoint) {
   this.endpoints.push(endpoint);
 };
 
-Endpoints.prototype.processAfterware = function(server) {
+Endpointer.prototype.processAfterware = function(server) {
   var self = this
 
   server.on('after', function(req, res, route, err) {
@@ -56,7 +57,7 @@ Endpoints.prototype.processAfterware = function(server) {
   })
 }
  
-Endpoints.prototype.autodiscover = function(endpointpath, endpoint_args) {
+Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
   var self = this
 
   // find all endpoints in `path`, similar to your `middleware/index.js` file
@@ -100,12 +101,12 @@ Endpoints.prototype.autodiscover = function(endpointpath, endpoint_args) {
 };
 
 // Attach to the Restify Server
-Endpoints.prototype.attach = function (server) {
+Endpointer.prototype.attach = function (server) {
   this.createRoutes(server);
 };
 
 // Loop through all defined endpoints, add them to the Restify Server
-Endpoints.prototype.createRoutes = function(server) {
+Endpointer.prototype.createRoutes = function(server) {
   var self = this
 
   // Here we add each endpoint as a route to the server.
@@ -156,26 +157,7 @@ Endpoints.prototype.createRoutes = function(server) {
             middleware.push(endpoint.handler.bind(endpoint))
           }
 
-          var afters = endpoint.afterware || []
-          if (afters.constructor.name !== 'Array')
-            afters = [ afters ]
-
-          if (version == '*') {
-            var route = server[method.toLowerCase()]({
-              path: path
-            }, middleware)
-          } else {
-            var route = server[method.toLowerCase()]({
-              path: path,
-              version: version
-            }, middleware)
-          }
-
-          self.afterware[route] = []
-          for (var x=0; x<afters.length; x++) {
-            self.afterware[route].push(afters[x].bind(endpoint))
-          }
-
+          self.attachRoute(server, endpoint, middleware)
         })
       })
     })
@@ -185,4 +167,8 @@ Endpoints.prototype.createRoutes = function(server) {
 };
 
 
-module.exports.Endpoints = Endpoints
+Endpointer.prototype.attachRoute = function (server, endpoint, middleware) {
+  // placeholder
+}
+
+module.exports = Endpointer
