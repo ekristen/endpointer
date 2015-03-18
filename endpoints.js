@@ -3,8 +3,11 @@ var path = require('path')
 var xtend = require('xtend')
 var debug = require('debug')('endpoints')
 
+var docs = require('./docs.js')
+
 var Endpoints = function(options) {
   this.options = xtend({
+    docs: false,
     endpoint_args: []
   }, options)
 
@@ -32,7 +35,7 @@ Endpoints.prototype.addEndpoint = function(endpoint) {
   if (!endpoint.method)
     throw new Error('Method is required in an endpoint definition')
   
-  if (!endpoint.fn)
+  if (!endpoint.handler)
     throw new Error('fn is required to define an endpoint')
   
   // Add the endpoint to the endpoints
@@ -150,7 +153,7 @@ Endpoints.prototype.createRoutes = function(server) {
           if (typeof(endpoint[version]) == "function") {
             middleware.push(endpoint[version].bind(endpoint))
           } else {
-            middleware.push(endpoint.fn.bind(endpoint))
+            middleware.push(endpoint.handler.bind(endpoint))
           }
 
           var afters = endpoint.afterware || []
