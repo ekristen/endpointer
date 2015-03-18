@@ -1,16 +1,14 @@
 {
-  "name": "restify-endpoints",
-  "description": "Endpoint Manager for Restify",
-  "version": "2.0.0",
+  "name": "endpointer",
+  "description": "Endpoint Manager",
+  "version": "0.0.1",
   "author": "Erik Kristensen <erik@erikkristensen.com>",
   "contributors": [
     "Robert Klep",
-    "David Weinstein"
+    "David Weinstein",
+    "Dean Landolt"
   ],
-  "homepage": "https://github.com/ekristen/restify-endpoints",
-  "scripts": {
-    "test": "nodeunit test/"
-  },
+  "homepage": "https://github.com/ekristen/endpointer",
   "main": "endpoints.js",
   "dependencies": {
     "debug": "^2.1.3",
@@ -24,6 +22,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/ekristen/restify-endpoints.git"
+    "url": "git://github.com/ekristen/endpointer.git"
   }
 }
