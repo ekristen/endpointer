@@ -43,6 +43,10 @@ Endpointer.prototype.addEndpoint = function(endpoint) {
   this.endpoints.push(endpoint);
 };
 
+Endpointer.prototype.getEndpoints = function() {
+  return this.endpoints;
+}
+
 Endpointer.prototype.processAfterware = function(server) {
   var self = this
 
