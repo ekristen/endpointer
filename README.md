@@ -3,7 +3,7 @@
 This is a complete rewrite of the original restify-endpoints project. This will support full auto-documentation as well as being able to be attached to restify, express, or a vanilla http service with a router attached.
 
 
-## 
+## Server Examples
 
 ### Restify
 
@@ -44,3 +44,11 @@ endpoints.attach(server)
 
 server.listen(8000)
 ```
+
+
+## Additional Information
+
+### Afterware
+
+This is only supported on `restify` unless you add a `server.on('after')` handler for `express` or the vanilla http server. You'd need to emit the `after` event AFTER the response has already been sent.
+
