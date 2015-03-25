@@ -52,6 +52,7 @@ Endpointer.prototype.addEndpoint = function(endpoint) {
   if (!endpoint.method)
     throw new Error('Method is required in an endpoint definition')
   
+  endpoint.handler = endpoint.handler || endpoint.fn || null
   if (!endpoint.handler)
     throw new Error('fn is required to define an endpoint')
   
