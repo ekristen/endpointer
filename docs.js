@@ -115,13 +115,15 @@ function parseProfile(config) {
 
 module.exports = function(endpointer) {
   
+  var prefix = endpointer.options.docs.prefix || '/docs'
+  
   var endpoints = {
     name: 'Docs',
     description: 'Documentation Endpoints',
     endpoints: [
       {
         name: 'getDocsProject',
-        path: '/docs/api_project.js',
+        path: prefix + '/api_project.js',
         method: 'GET',
         handler: function(req, res) {
           res.write('define(' + JSON.stringify(parseProfile(endpointer.options)) + ')')
@@ -130,7 +132,7 @@ module.exports = function(endpointer) {
       },
       {
         name: 'getDocsData',
-        path: '/docs/api_data.js',
+        path: prefix + '/api_data.js',
         method: 'GET',
         handler: function(req, res) {
           res.write('define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')')
@@ -139,7 +141,7 @@ module.exports = function(endpointer) {
       },
       {
         name: 'getDocs',
-        path: '/docs/.*',
+        path: prefix + '/.*',
         method: 'GET',
         handler: function(req, res) {
           var assets = ecstatic({
@@ -147,7 +149,7 @@ module.exports = function(endpointer) {
             baseDir: '/docs',
             cache: 0
           })
-          
+
           assets(req, res)
         }
       }
