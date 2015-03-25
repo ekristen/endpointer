@@ -14,7 +14,7 @@ module.exports = {
       auth: false,
       path: '/example',
       version: '1.0.0',
-      fn: function (req, res, next) {
+      handler: function (req, res, next) {
         res.send({"status": "ok", "message": "Example Default Endpoint"});
         return next();
       }
@@ -26,7 +26,7 @@ module.exports = {
       auth: false,
       path: '/example/:id',
       version: '1.0.0',
-      fn: function (req, res, next) {
+      handler: function (req, res, next) {
         res.send(data[req.params.id]);
         return next();
       }

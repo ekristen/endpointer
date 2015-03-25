@@ -3,24 +3,35 @@ var path = require('path')
 var xtend = require('xtend')
 var debug = require('debug')('endpoints')
 
-var docs = require('./docs.js')
+//var docs = require('./docs.js')
 
 var Endpointer = function(options) {
-  this.options = xtend({
+  var self = this
+  
+  self.options = xtend({
     docs: false,
     endpoint_args: [],
     endpointpath: ''
   }, options)
 
-  this.endpoints = []
-  this.middleware = []
-  this.afterware = {}
+  self.endpoints = []
+  self.middleware = []
+  self.afterware = {}
 
-  this.endpoint_modules = {}
+  self.endpoint_modules = {}
 
   // Find all defined endpoints from the endpoint path
-  if (this.options.endpointpath) {
-    this.autodiscover(options.endpointpath, this.options.endpoint_args)
+  if (self.options.endpointpath) {
+    self.autodiscover(options.endpointpath, self.options.endpoint_args)
+  }
+  
+  if (self.options.docs == true) {
+    var docs = require('./docs.js')(self)
+    docs.endpoints.forEach(function(endpoint) {
+      endpoint.group = docs.name
+      endpoint.groupTitle = docs.name
+      self.addEndpoint(endpoint)
+    })
   }
 };
 
@@ -91,9 +102,12 @@ Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
   Object.keys(self.endpoint_modules).forEach(function (c) {
     if (typeof(self.endpoint_modules[c]) != 'undefined') {
       if (typeof(self.endpoint_modules[c].endpoints) != 'undefined') {
-        var endpoints = self.endpoint_modules[c].endpoints || []
+        var group = self.endpoint_modules[c]
+        var endpoints = group.endpoints || []
         // Add new endpoints to the list (keeping the list flat).
         endpoints.forEach(function(endpoint) {
+          endpoint.group = group.name
+          endpoint.groupTitle = group.name
           self.addEndpoint(endpoint)
         }.bind(self))
       }
@@ -117,7 +131,6 @@ Endpointer.prototype.createRoutes = function(server) {
   var allowed_methods = { 'GET' : true, 'POST' : true, 'PUT' : true, 'DEL' : true, 'HEAD': true }
 
   this.endpoints.forEach(function(endpoint) {
-
     // Create a list of methods for this endpoint.
     var methods = endpoint.method
     if (methods.constructor.name !== 'Array')
