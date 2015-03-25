@@ -1,8 +1,12 @@
 var restify = require('restify');
-var endpoints = require('../../lib');
+var Endpointer = require('../../restify');
 
-var endpoints = new endpoints.EndpointManager({
-	endpointpath: __dirname + '/endpoints'
+var endpoints = new Endpointer({
+  docs: {
+    enabled: true
+  },
+  version: '2.0.0',
+	endpoints: __dirname + '/endpoints'
 });
 
 // Create the RESTful Server

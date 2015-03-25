@@ -1,26 +1,43 @@
 var fs = require('fs')
 var path = require('path')
 var xtend = require('xtend')
+var lodash = require('lodash')
 var debug = require('debug')('endpoints')
 
-var docs = require('./docs.js')
+//var docs = require('./docs.js')
 
 var Endpointer = function(options) {
-  this.options = xtend({
-    docs: false,
-    endpoint_args: [],
-    endpointpath: ''
+  var self = this
+  
+  self.options = xtend({
+    title: 'Endpointer',
+    url: 'http://localhost:3000',
+    docs: {
+      enabled: false,
+      prefix: '/docs',
+    },
+    arguments: [],
+    endpoints: './endpoints'
   }, options)
 
-  this.endpoints = []
-  this.middleware = []
-  this.afterware = {}
+  self.endpoints = []
+  self.middleware = []
+  self.afterware = {}
 
-  this.endpoint_modules = {}
+  self.endpoint_modules = {}
 
   // Find all defined endpoints from the endpoint path
-  if (this.options.endpointpath) {
-    this.autodiscover(options.endpointpath, this.options.endpoint_args)
+  if (self.options.endpoints) {
+    self.autodiscover(self.options.endpoints, self.options.arguments)
+  }
+
+  if (self.options.docs.enabled == true) {
+    var docs = require('./docs.js')(self)
+    docs.endpoints.forEach(function(endpoint) {
+      endpoint.group = docs.name
+      endpoint.groupTitle = docs.name
+      self.addEndpoint(endpoint)
+    })
   }
 };
 
@@ -36,6 +53,7 @@ Endpointer.prototype.addEndpoint = function(endpoint) {
   if (!endpoint.method)
     throw new Error('Method is required in an endpoint definition')
   
+  endpoint.handler = endpoint.handler || endpoint.fn || null
   if (!endpoint.handler)
     throw new Error('fn is required to define an endpoint')
   
@@ -61,11 +79,11 @@ Endpointer.prototype.processAfterware = function(server) {
   })
 }
  
-Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
+Endpointer.prototype.autodiscover = function(discover_path, discover_args) {
   var self = this
 
   // find all endpoints in `path`, similar to your `middleware/index.js` file
-  var files = fs.readdirSync(endpointpath)
+  var files = fs.readdirSync(discover_path)
 
   // loop through endpoint files and load them.
   for (var i = 0; i < files.length; i++ ) {
@@ -74,11 +92,11 @@ Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
 
     if (extname == '.js' && self.endpoint_modules[files[i]] !== true) {
       try {
-        self.endpoint_modules[basename] = require(endpointpath + '/' + files[i]).apply(null, endpoint_args)
+        self.endpoint_modules[basename] = require(discover_path + '/' + files[i]).apply(null, discover_args)
       }
       catch (e) {
         if (e.message == "Object #<Object> has no method 'apply'") {
-          self.endpoint_modules[basename] = require(endpointpath + '/' + files[i])
+          self.endpoint_modules[basename] = require(discover_path + '/' + files[i])
         }
         else {
           throw e
@@ -91,9 +109,12 @@ Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
   Object.keys(self.endpoint_modules).forEach(function (c) {
     if (typeof(self.endpoint_modules[c]) != 'undefined') {
       if (typeof(self.endpoint_modules[c].endpoints) != 'undefined') {
-        var endpoints = self.endpoint_modules[c].endpoints || []
+        var group = self.endpoint_modules[c]
+        var endpoints = group.endpoints || []
         // Add new endpoints to the list (keeping the list flat).
         endpoints.forEach(function(endpoint) {
+          endpoint.group = group.name
+          endpoint.groupTitle = group.name
           self.addEndpoint(endpoint)
         }.bind(self))
       }
@@ -117,7 +138,6 @@ Endpointer.prototype.createRoutes = function(server) {
   var allowed_methods = { 'GET' : true, 'POST' : true, 'PUT' : true, 'DEL' : true, 'HEAD': true }
 
   this.endpoints.forEach(function(endpoint) {
-
     // Create a list of methods for this endpoint.
     var methods = endpoint.method
     if (methods.constructor.name !== 'Array')
@@ -161,7 +181,12 @@ Endpointer.prototype.createRoutes = function(server) {
             middleware.push(endpoint.handler.bind(endpoint))
           }
 
-          self.attachRoute(server, endpoint, middleware)
+          var ep = lodash.clone(endpoint)
+          ep.version = version
+          ep.path = path
+          ep.method = method
+
+          self.attachRoute(server, ep, middleware)
         })
       })
     })
