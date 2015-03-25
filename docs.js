@@ -28,7 +28,7 @@ function parseFieldGroup(fields, group) {
     var result = {
       group: group,
       type: field.type,
-      field: key,
+      field: fields[key].name || key,
       optional: field.required === false,
       description: field.description || ''
     };
