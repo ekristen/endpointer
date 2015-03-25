@@ -1,6 +1,7 @@
 var fs = require('fs')
 var path = require('path')
 var xtend = require('xtend')
+var lodash = require('lodash')
 var debug = require('debug')('endpoints')
 
 //var docs = require('./docs.js')
@@ -180,7 +181,12 @@ Endpointer.prototype.createRoutes = function(server) {
             middleware.push(endpoint.handler.bind(endpoint))
           }
 
-          self.attachRoute(server, endpoint, middleware)
+          var ep = lodash.clone(endpoint)
+          ep.version = version
+          ep.path = path
+          ep.method = method
+
+          self.attachRoute(server, ep, middleware)
         })
       })
     })
