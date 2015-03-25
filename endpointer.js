@@ -9,9 +9,14 @@ var Endpointer = function(options) {
   var self = this
   
   self.options = xtend({
-    docs: false,
-    endpoint_args: [],
-    endpointpath: ''
+    title: 'Endpointer',
+    url: 'http://localhost:3000',
+    docs: {
+      enabled: false,
+      prefix: '/docs',
+    },
+    arguments: [],
+    endpoints: './endpoints'
   }, options)
 
   self.endpoints = []
@@ -21,11 +26,11 @@ var Endpointer = function(options) {
   self.endpoint_modules = {}
 
   // Find all defined endpoints from the endpoint path
-  if (self.options.endpointpath) {
-    self.autodiscover(options.endpointpath, self.options.endpoint_args)
+  if (self.options.endpoints) {
+    self.autodiscover(self.options.endpoints, self.options.arguments)
   }
-  
-  if (self.options.docs == true) {
+
+  if (self.options.docs.enabled == true) {
     var docs = require('./docs.js')(self)
     docs.endpoints.forEach(function(endpoint) {
       endpoint.group = docs.name
@@ -72,11 +77,11 @@ Endpointer.prototype.processAfterware = function(server) {
   })
 }
  
-Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
+Endpointer.prototype.autodiscover = function(discover_path, discover_args) {
   var self = this
 
   // find all endpoints in `path`, similar to your `middleware/index.js` file
-  var files = fs.readdirSync(endpointpath)
+  var files = fs.readdirSync(discover_path)
 
   // loop through endpoint files and load them.
   for (var i = 0; i < files.length; i++ ) {
@@ -85,11 +90,11 @@ Endpointer.prototype.autodiscover = function(endpointpath, endpoint_args) {
 
     if (extname == '.js' && self.endpoint_modules[files[i]] !== true) {
       try {
-        self.endpoint_modules[basename] = require(endpointpath + '/' + files[i]).apply(null, endpoint_args)
+        self.endpoint_modules[basename] = require(discover_path + '/' + files[i]).apply(null, discover_args)
       }
       catch (e) {
         if (e.message == "Object #<Object> has no method 'apply'") {
-          self.endpoint_modules[basename] = require(endpointpath + '/' + files[i])
+          self.endpoint_modules[basename] = require(discover_path + '/' + files[i])
         }
         else {
           throw e

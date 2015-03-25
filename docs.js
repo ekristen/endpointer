@@ -57,112 +57,58 @@ function parseParams(params) {
 }
 
 function parseEndpoint(endpoint) {
-  var value = {};
+  var value = {}
 
-  value.name = endpoint.name;
-  value.version = endpoint.version;
+  value.name = endpoint.name
+  value.version = endpoint.version
 
   value.group = endpoint.group
   value.groupTitle = endpoint.group
-
-  //value.permission = parsePermission(source);
 
   value.title = endpoint.title || endpoint.name
   value.description = endpoint.description;
   value.type = (endpoint.method || 'GET').toUpperCase();
   value.url = endpoint.path || source.path;
 
-  //value.parameter = parseParams(source.params);
+  value.parameter = parseParams(endpoint.params || {});
+
+  // TODO -- need to allow for these soon!
+  //value.permission = parsePermission(source);
   //value.success = parseFields(source.success, 'Success ');
   //value.error = parseFields(source.error, 'Error ');
-
   //value.examples = parseExamples(source.examples || {});
 
   return value;
 }
 
-function parseApiOld(api, results) {
-  results || (results = []);
-
-  var context = { version: api.version };
-
-  //
-  // endpoints organized by group
-  //
-  var name, endpoints;
-  for (var groupName in api.groups) {
-    context.groupName = groupName;
-    var group = context.group = api.groups[groupName] || {};
-
-    // clear any context values that may have been written
-    context.path = '';
-    context.type = '';
-
-    endpoints = group.endpoints || {};
-    for (name in endpoints) {
-      context.name = name;
-      results.push(parseEndpoint(endpoints[name], context));
-    }
-  }
-
-  //
-  // parse previous api data if present
-  //
-  if (api.previous) {
-    parseApi(api.previous, results);
-  }
-
-  return results;
-}
-
-function parseApi(endpoints) {
+function parseApiEndpoints(endpoints) {
   var results = []
   endpoints.forEach(function(endpoint) {
+    if (endpoint.group.toLowerCase() == 'docs') return
     results.push(parseEndpoint(endpoint))
   })
   return results
 }
 
-function parseProfileOld(config) {
-  //
-  // conservatively remap properties manually for apidocjs config
-  //
-  var api = config.api || {};
-  var profile = xtend({}, api, config);
 
-  profile.name || (profile.name = '');
-  profile.title = config.doc.title || profile.title || profile.name;
+function parseProfile(config) {
+  var profile = {}
 
-  var basePath = (config.prefix || '') + (api.prefix || '');
-  profile.url = (config.doc.url || '') + basePath;
+  profile.title = config.docs.title || config.title
+  profile.name = profile.title
 
-  profile.header = config.doc.header;
-  profile.footer = config.doc.footer;
+  profile.url = config.url + (config.docs.prefix || '/docs')
+
+  profile.header = config.docs.header || { content: '' }
+  profile.footer = config.docs.footer || { content: '' }
+
   profile.template = {
-    withCompare: !!api.previous,
-    withGenerator: false
-  };
-
-  return profile;
-}
-
-function parseProfile() {
-  var profile = {
-    description: "\n    REST API for interacting with nsintel data, et cetera...\n    Moar text as <strong>arbitrary</strong> html...\n  ",
-    footer: {
-      content: "\n      <h1>Custom Footer</h1>\n      <p>This is an arbitrary <code>HTML</code> fragment</p>\n    ",
-      title: "Custom Footer Title"
-    },
-    name: "NowSecure Mobile Intelligence API",
-    template: {
-      withCompare: true,
-      withGenerator: false
-    },
-    title: "NowSecure Mobile Intelligence API",
-    url: "https://api.nowsecure.com/nsintel",
-    version: "0.3.0"
+    withCompare: config.docs.withCompare || true,
+    wighGenerator: false
   }
-  
+
+  profile.version = config.version || '0.0.0'
+
   return profile
 }
 
@@ -173,6 +119,24 @@ module.exports = function(endpointer) {
     name: 'Docs',
     description: 'Documentation Endpoints',
     endpoints: [
+      {
+        name: 'getDocsProject',
+        path: '/docs/api_project.js',
+        method: 'GET',
+        handler: function(req, res) {
+          res.write('define(' + JSON.stringify(parseProfile(endpointer.options)) + ')')
+          res.end()
+        }
+      },
+      {
+        name: 'getDocsData',
+        path: '/docs/api_data.js',
+        method: 'GET',
+        handler: function(req, res) {
+          res.write('define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')')
+          res.end()
+        }
+      },
       {
         name: 'getDocs',
         path: '/docs/.*',
@@ -185,24 +149,6 @@ module.exports = function(endpointer) {
           })
           
           assets(req, res)
-        }
-      },
-      {
-        name: 'getDocsProject',
-        path: '/api_project.js',
-        method: 'GET',
-        handler: function(req, res) {
-          res.write('define(' + JSON.stringify(parseProfile()) + ')')
-          res.end()
-        }
-      },
-      {
-        name: 'getDocsData',
-        path: '/api_data.js',
-        method: 'GET',
-        handler: function(req, res) {
-          res.write('define(' + JSON.stringify({ api: parseApi(endpointer.endpoints) }) + ')')
-          res.end()
         }
       }
     ]

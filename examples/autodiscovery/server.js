@@ -2,8 +2,11 @@ var restify = require('restify');
 var Endpointer = require('../../restify');
 
 var endpoints = new Endpointer({
-  docs: true,
-	endpointpath: __dirname + '/endpoints'
+  docs: {
+    enabled: true
+  },
+  version: '2.0.0',
+	endpoints: __dirname + '/endpoints'
 });
 
 // Create the RESTful Server
@@ -20,10 +23,5 @@ server.use(restify.conditionalRequest());
 
 // Attach Restify Endpoints to RESTify server
 endpoints.attach(server);
-
-server.get(/\/docs\/?.*/, restify.serveStatic({
-  directory: './assets/template',
-  default: 'index.html'
-}));
 
 server.listen(3000);
