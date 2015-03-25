@@ -97,7 +97,7 @@ function parseProfile(config) {
   profile.title = config.docs.title || config.title
   profile.name = profile.title
 
-  profile.url = config.url + (config.docs.prefix || '/docs')
+  profile.url = config.url
 
   profile.header = config.docs.header || { content: '' }
   profile.footer = config.docs.footer || { content: '' }
