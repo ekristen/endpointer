@@ -96,21 +96,8 @@ Endpointer.prototype.autodiscover = function(discover_path, discover_args) {
         self.endpoint_modules[basename] = mod.apply(null, discover_args)
       }
       else {
-        self.endpoint_modules[basename] = require(discover_path + '/' + files[i])
+        self.endpoint_modules[basename] = mod
       }
-      /*
-      try {
-        self.endpoint_modules[basename] = require(discover_path + '/' + files[i]).apply(null, discover_args)
-      }
-      catch (e) {
-        if (e.message == "undefined is not a function") {
-          self.endpoint_modules[basename] = require(discover_path + '/' + files[i])
-        }
-        else {
-          throw e
-        }
-      }
-      */
     }
   }
 
