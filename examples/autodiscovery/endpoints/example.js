@@ -39,12 +39,12 @@ module.exports = {
       }
     },
     {
-      name: 'getExample',
-      description: 'Get Example Data for all Endpoints',
-      method: 'GET',
+      name: 'deleteExample',
+      description: 'Delete Example Data for all Endpoints',
+      method: 'DELETE',
       auth: false,
       path: '/example/:id',
-      version: '2.0.0',
+      version: '1.0.0',
       params: {
         id: {
           required: true,

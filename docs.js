@@ -1,6 +1,9 @@
-var path = require('path');
-var xtend = require('xtend');
-var ecstatic = require('ecstatic');
+var fs = require('fs')
+var ncp = require('ncp')
+var tar = require('tar.gz')
+var path = require('path')
+var xtend = require('xtend')
+var ecstatic = require('ecstatic')
 
 function parsePermission(endpoint) {
   var annotations = endpoint.handler && endpoint.handler.annotations || {};
@@ -107,7 +110,7 @@ function parseProfile(config) {
     wighGenerator: false
   }
 
-  profile.version = config.version || '0.0.0'
+  profile.version = config.docs.version || '1.0.0'
 
   return profile
 }
@@ -121,6 +124,39 @@ module.exports = function(endpointer) {
     name: 'Docs',
     description: 'Documentation Endpoints',
     endpoints: [
+      {
+        name: 'exportDocs',
+        description: 'Exports Documentation into a ZIP File',
+        path: prefix + '/export',
+        method: 'GET',
+        handler: function(req, res) {
+          var tmp = '/tmp'
+          var dst = path.join(tmp, 'docs-' + Math.random())
+          var src = path.join(__dirname, 'assets', 'template')
+          var file = path.join(tmp, 'docs-export.tar.gz')
+          var api_proj = 'define(' + JSON.stringify(parseProfile(endpointer.options)) + ')'
+          var api_data = 'define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')'
+
+          ncp(src, dst, function(err) {
+            if (err) {
+              return res.end(err)
+            }
+
+            fs.writeFileSync(path.join(dst, 'api_project.js'), api_proj)
+            fs.writeFileSync(path.join(dst, 'api_data.js'), api_data)
+            
+            var compress = new tar().compress(dst, file, function(err) {
+              if (err) {
+                return res.end(err)
+              }
+
+              res.setHeader('Content-Disposition', 'attachment; filename=' + file)
+              res.setHeader('Content-Type', 'application/x-gtar')
+              fs.createReadStream(file).pipe(res)
+            })
+          })
+        }
+      },
       {
         name: 'getDocsProject',
         path: prefix + '/api_project.js',

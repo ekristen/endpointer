@@ -91,17 +91,26 @@ Endpointer.prototype.autodiscover = function(discover_path, discover_args) {
     var basename = path.basename(files[i], '.js')
 
     if (extname == '.js' && self.endpoint_modules[files[i]] !== true) {
+      var mod = require(discover_path + '/' + files[i])
+      if (typeof mod == 'function') {
+        self.endpoint_modules[basename] = mod.apply(null, discover_args)
+      }
+      else {
+        self.endpoint_modules[basename] = require(discover_path + '/' + files[i])
+      }
+      /*
       try {
         self.endpoint_modules[basename] = require(discover_path + '/' + files[i]).apply(null, discover_args)
       }
       catch (e) {
-        if (e.message == "Object #<Object> has no method 'apply'") {
+        if (e.message == "undefined is not a function") {
           self.endpoint_modules[basename] = require(discover_path + '/' + files[i])
         }
         else {
           throw e
         }
       }
+      */
     }
   }
 
