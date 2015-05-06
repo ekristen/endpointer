@@ -5,11 +5,11 @@ var manager = require('../lib');
 
 exports.setUp = function(done) {
   done();
-}
+};
 
 exports.tearDown = function(done) {
   done();
-}
+};
 
 
 exports.addBasicEndpoint = function(test) {
@@ -29,7 +29,7 @@ exports.addBasicEndpoint = function(test) {
   endpoints.attach(server);
 
   test.done();
-}
+};
 
 exports.addBasicEndpointWithVersion = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -47,7 +47,7 @@ exports.addBasicEndpointWithVersion = function(test) {
   });
 
   test.done();
-}
+};
 
 exports.addMultipleMethodEndpoint = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -64,7 +64,7 @@ exports.addMultipleMethodEndpoint = function(test) {
   });
 
   test.done();
-}
+};
 
 exports.addMultipleVersionsEndpoint = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -82,7 +82,7 @@ exports.addMultipleVersionsEndpoint = function(test) {
   });
 
   test.done();
-}
+};
 
 exports.addMultiplePathsEndpoint = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -100,7 +100,7 @@ exports.addMultiplePathsEndpoint = function(test) {
   });
 
   test.done();
-}
+};
 
 exports.addMultipleVersionsMethodEndpoint = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -118,4 +118,4 @@ exports.addMultipleVersionsMethodEndpoint = function(test) {
   });
 
   test.done();
-}
+};

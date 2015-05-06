@@ -5,11 +5,11 @@ var manager = require('../lib');
 
 exports.setUp = function(done) {
   done();
-}
+};
 
 exports.tearDown = function(done) {
   done();
-}
+};
 
 exports.errorNoPathEndpoint = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -31,7 +31,7 @@ exports.errorNoPathEndpoint = function(test) {
   }
 
   test.done();
-}
+};
 
 
 exports.errorNoNameEndpoint = function(test) {
@@ -54,7 +54,7 @@ exports.errorNoNameEndpoint = function(test) {
   }
 
   test.done();
-}
+};
 
 
 exports.errorNoMethodEndpoint = function(test) {
@@ -77,7 +77,7 @@ exports.errorNoMethodEndpoint = function(test) {
   }
 
   test.done();
-}
+};
 
 
 exports.errorNoFunctionEndpoint = function(test) {
@@ -98,6 +98,4 @@ exports.errorNoFunctionEndpoint = function(test) {
   }
 
   test.done();
-}
-
-
+};

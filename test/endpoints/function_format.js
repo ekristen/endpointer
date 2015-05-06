@@ -15,8 +15,8 @@ module.exports = function() {
         }
       }
     ]
-  }
+  };
   
   return endpoints;
 
-}
+};

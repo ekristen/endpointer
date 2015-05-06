@@ -15,11 +15,11 @@ function testMiddleware2 (req, res, next) {
 
 exports.setUp = function(done) {
   done();
-}
+};
 
 exports.tearDown = function(done) {
   done();
-}
+};
 
 exports.singleMiddleware = function(test) {
   var endpoints = new manager.EndpointManager();
@@ -42,7 +42,7 @@ exports.singleMiddleware = function(test) {
   }
 
   test.done();
-}
+};
 
 
 exports.multipleMiddleware = function(test) {
@@ -69,5 +69,4 @@ exports.multipleMiddleware = function(test) {
   }
 
   test.done();
-}
-
+};

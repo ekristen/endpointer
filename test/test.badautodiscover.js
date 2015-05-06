@@ -25,14 +25,14 @@ exports.setUp = function(done) {
   server.listen(9999, function() {
     done();
   });
-}
+};
 
 exports.tearDown = function(done) {
   server.close();
   client.close();
   done();
-}
+};
 
 exports.doesThisRun = function(test) {
   test.done();
-}
+};

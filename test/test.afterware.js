@@ -43,7 +43,7 @@ exports.setUp = function(done) {
           retry: false
       });
 
-      done()
+      done();
   });
 };
 

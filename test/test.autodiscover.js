@@ -25,13 +25,13 @@ exports.setUp = function(done) {
   server.listen(9999, function() {
     done();
   });
-}
+};
 
 exports.tearDown = function(done) {
   server.close();
   client.close();
   done();
-}
+};
 
 exports.autoDiscoverFunctionFormat = function(test) {
   client.get('/test6', function(err, req, res, data) {
@@ -40,7 +40,7 @@ exports.autoDiscoverFunctionFormat = function(test) {
     test.equal(data, 'function format');
     test.done();
   });
-}
+};
 
 exports.autoDiscoverObjectFormat = function(test) {
   client.get('/test5', function(err, req, res, data) {
@@ -49,4 +49,4 @@ exports.autoDiscoverObjectFormat = function(test) {
     test.equal(data, 'object format');
     test.done();
   });
-}
+};
