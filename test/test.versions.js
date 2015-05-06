@@ -90,13 +90,13 @@ exports.setUp = function(done) {
   server.listen(9999, function() {
     done();
   });
-}
+};
 
 exports.tearDown = function(done) {
   server.close();
   client.close();
   done();
-}
+};
 
 exports.noVersion = function(test) {
   client.get('/test5', function(err, req, res, data) {
@@ -105,7 +105,7 @@ exports.noVersion = function(test) {
     test.equal(data, 'no version');
     test.done();
   });
-}
+};
 
 exports.version1 = function(test) {
   var options = {
@@ -121,7 +121,7 @@ exports.version1 = function(test) {
     test.equal(data, '1.0.0');
     test.done();
   });
-}
+};
 
 exports.versionLike1 = function(test) {
   var options = {
@@ -137,7 +137,7 @@ exports.versionLike1 = function(test) {
     test.equal(data, '1.0.2');
     test.done();
   });
-}
+};
 
 exports.version2 = function(test) {
   var options = {
@@ -153,7 +153,7 @@ exports.version2 = function(test) {
     test.equal(data, '2.0.0');
     test.done();
   });
-}
+};
 
 exports.versionLike2 = function(test) {
   var options = {
@@ -169,5 +169,4 @@ exports.versionLike2 = function(test) {
     test.equal(data, '2.0.1');
     test.done();
   });
-}
-
+};

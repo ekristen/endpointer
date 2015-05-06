@@ -1,13 +1,13 @@
-var fs = require('fs')
-var ncp = require('ncp')
-var tar = require('tar.gz')
-var path = require('path')
-var xtend = require('xtend')
-var ecstatic = require('ecstatic')
+var fs       = require('fs');
+var ncp      = require('ncp');
+var tar      = require('tar.gz');
+var path     = require('path');
+var xtend    = require('xtend');
+var ecstatic = require('ecstatic');
 
 function parsePermission(endpoint) {
   var annotations = endpoint.handler && endpoint.handler.annotations || {};
-  return annotations.permission ? [ annotations.permission ] : []
+  return annotations.permission ? [ annotations.permission ] : [];
 }
 
 function parseExamples(examples) {
@@ -42,7 +42,7 @@ function parseFieldGroup(fields, group) {
 }
 
 function parseFields(fields, prefix) {
-  fields || (fields = {});
+  fields = fields || {};
   var value = { fields: {} };
 
   for (var name in fields) {
@@ -60,15 +60,15 @@ function parseParams(params) {
 }
 
 function parseEndpoint(endpoint) {
-  var value = {}
+  var value = {};
 
-  value.name = endpoint.name
-  value.version = endpoint.version
+  value.name = endpoint.name;
+  value.version = endpoint.version;
 
-  value.group = endpoint.group
-  value.groupTitle = endpoint.group
+  value.group = endpoint.group;
+  value.groupTitle = endpoint.group;
 
-  value.title = endpoint.title || endpoint.name
+  value.title = endpoint.title || endpoint.name;
   value.description = endpoint.description;
   value.type = (endpoint.method || 'GET').toUpperCase();
   value.url = endpoint.path || source.path;
@@ -85,40 +85,40 @@ function parseEndpoint(endpoint) {
 }
 
 function parseApiEndpoints(endpoints) {
-  var results = []
+  var results = [];
   endpoints.forEach(function(endpoint) {
-    if (endpoint.group.toLowerCase() == 'docs') return
-    results.push(parseEndpoint(endpoint))
-  })
-  return results
+    if (endpoint.group.toLowerCase() == 'docs') return;
+    results.push(parseEndpoint(endpoint));
+  });
+  return results;
 }
 
 
 function parseProfile(config) {
-  var profile = {}
+  var profile = {};
 
-  profile.title = config.docs.title || config.title
-  profile.name = profile.title
+  profile.title = config.docs.title || config.title;
+  profile.name = profile.title;
 
-  profile.url = config.url
+  profile.url = config.url;
 
-  profile.header = config.docs.header || { content: '' }
-  profile.footer = config.docs.footer || { content: '' }
+  profile.header = config.docs.header || { content: '' };
+  profile.footer = config.docs.footer || { content: '' };
 
   profile.template = {
     withCompare: config.docs.withCompare || true,
-    wighGenerator: false
-  }
+    wighGenerator: false,
+  };
 
-  profile.version = config.docs.version || '1.0.0'
+  profile.version = config.docs.version || '1.0.0';
 
-  return profile
+  return profile;
 }
 
 
 module.exports = function(endpointer) {
   
-  var prefix = endpointer.options.docs.prefix || '/docs'
+  var prefix = endpointer.options.docs.prefix || '/docs';
   
   var endpoints = {
     name: 'Docs',
@@ -130,31 +130,31 @@ module.exports = function(endpointer) {
         path: prefix + '/export',
         method: 'GET',
         handler: function(req, res) {
-          var tmp = '/tmp'
-          var dst = path.join(tmp, 'docs-' + Math.random())
-          var src = path.join(__dirname, 'assets', 'template')
-          var file = path.join(tmp, 'docs-export.tar.gz')
-          var api_proj = 'define(' + JSON.stringify(parseProfile(endpointer.options)) + ')'
-          var api_data = 'define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')'
+          var tmp = '/tmp';
+          var dst = path.join(tmp, 'docs-' + Math.random());
+          var src = path.join(__dirname, 'assets', 'template');
+          var file = path.join(tmp, 'docs-export.tar.gz');
+          var api_proj = 'define(' + JSON.stringify(parseProfile(endpointer.options)) + ')';
+          var api_data = 'define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')';
 
           ncp(src, dst, function(err) {
             if (err) {
-              return res.end(err)
+              return res.end(err);
             }
 
-            fs.writeFileSync(path.join(dst, 'api_project.js'), api_proj)
-            fs.writeFileSync(path.join(dst, 'api_data.js'), api_data)
+            fs.writeFileSync(path.join(dst, 'api_project.js'), api_proj);
+            fs.writeFileSync(path.join(dst, 'api_data.js'), api_data);
             
             var compress = new tar().compress(dst, file, function(err) {
               if (err) {
-                return res.end(err)
+                return res.end(err);
               }
 
-              res.setHeader('Content-Disposition', 'attachment; filename=' + file)
-              res.setHeader('Content-Type', 'application/x-gtar')
-              fs.createReadStream(file).pipe(res)
-            })
-          })
+              res.setHeader('Content-Disposition', 'attachment; filename=' + file);
+              res.setHeader('Content-Type', 'application/x-gtar');
+              fs.createReadStream(file).pipe(res);
+            });
+          });
         }
       },
       {
@@ -162,8 +162,8 @@ module.exports = function(endpointer) {
         path: prefix + '/api_project.js',
         method: 'GET',
         handler: function(req, res) {
-          res.write('define(' + JSON.stringify(parseProfile(endpointer.options)) + ')')
-          res.end()
+          res.write('define(' + JSON.stringify(parseProfile(endpointer.options)) + ')');
+          res.end();
         }
       },
       {
@@ -171,8 +171,8 @@ module.exports = function(endpointer) {
         path: prefix + '/api_data.js',
         method: 'GET',
         handler: function(req, res) {
-          res.write('define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')')
-          res.end()
+          res.write('define(' + JSON.stringify({ api: parseApiEndpoints(endpointer.endpoints) }) + ')');
+          res.end();
         }
       },
       {
@@ -184,13 +184,13 @@ module.exports = function(endpointer) {
             root: path.join(__dirname, 'assets', 'template'),
             baseDir: '/docs',
             cache: 0
-          })
+          });
 
-          assets(req, res)
+          assets(req, res);
         }
       }
     ]
-  }
+  };
 
   return endpoints;
-}
+};

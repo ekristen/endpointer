@@ -16,13 +16,13 @@ exports.setUp = function(done) {
   server.listen(9999, function() {
     done();
   });
-}
+};
 
 exports.tearDown = function(done) {
   server.close();
   client.close();
   done();
-}
+};
 
 
 exports.checkTestEndpoint = function(test) {
@@ -44,7 +44,7 @@ exports.checkTestEndpoint = function(test) {
     test.equal(res.statusCode, 200);
     test.done();
   });
-}
+};
 
 exports.checkTest2Version1 = function(test) {
 
@@ -72,10 +72,10 @@ exports.checkTest2Version1 = function(test) {
   client.get(options, function(err, req, res, data) {
     test.ifError(err);
     test.equal(res.statusCode, 200);
-    test.equal(data, '1.0.0')
+    test.equal(data, '1.0.0');
     test.done();
   });
-}
+};
 
 exports.checkTest2Version2 = function(test) {
   
@@ -103,10 +103,10 @@ exports.checkTest2Version2 = function(test) {
   client.get(options, function(err, req, res, data) {
     test.ifError(err);
     test.equal(res.statusCode, 200);
-    test.equal(data, '2.0.0')
+    test.equal(data, '2.0.0');
     test.done();
   });
-}
+};
 
 exports.checkTest3Version1 = function(test) {
   endpoints.addEndpoint({
@@ -141,10 +141,10 @@ exports.checkTest3Version1 = function(test) {
   client.get(options, function(err, req, res, data) {
     test.ifError(err);
     test.equal(res.statusCode, 200);
-    test.equal(data, 'this is version 1')
+    test.equal(data, 'this is version 1');
     test.done();
   });
-}
+};
 
 
 exports.checkTest3Version2 = function(test) {
@@ -180,8 +180,7 @@ exports.checkTest3Version2 = function(test) {
   client.get(options, function(err, req, res, data) {
     test.ifError(err);
     test.equal(res.statusCode, 200);
-    test.equal(data, 'this is not version1 but version2')
+    test.equal(data, 'this is not version1 but version2');
     test.done();
   });
-}
-
+};
